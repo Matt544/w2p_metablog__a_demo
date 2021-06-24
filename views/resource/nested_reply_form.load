@@ -1,0 +1,39 @@
+{{from gluon.contrib.markmin.markmin2html import markmin2html}}
+
+<div class="bg-secondary p-4 my-5">
+
+  {{=LOAD('files_list', 'files_list.load', args=['Ajax Files', None], 
+          vars=dict(Controller=['controllers/resource.py', 'python'], 
+                    View=['views/resource/nested_reply_form.load', 'html']))}}
+
+  {{if logged_in:}}
+  <div class="w-75 ms-auto text-light">
+    <h4 class="my-3">Reply to {{=reply_author}}</h4>
+    {{=form}}
+  </div>
+
+  {{if last_nested_reply:}}
+  {{nested_reply = last_nested_reply}}
+  <!-- This renaming of the variable allows use of the generic nested_reply.html 
+       to display a just-submitted nested reply -->
+  {{include 'nested_reply.html'}}
+  {{pass}}
+
+  {{else:}}
+  <h3 class="text-light">Sign in or register to comment!</h3>
+  <a class="btn btn-info" href="
+    {{=URL('users', 'user/register', extension='html', 
+            vars=dict(_next=URL('resource', 'article', 
+                                 args=slug + '#' + reply_container_id, 
+                                 url_encode=False, extension='html')))}}">
+    Register
+  </a>
+  <a class="btn btn-light" href="
+    {{=URL('users', 'user/login', extension='html', 
+            vars=dict(_next=URL('resource', 'article', 
+                                 args=slug + '#' + reply_container_id, 
+                                 url_encode=False, extension='html')))}}">
+    Log in
+  </a>  
+  {{pass}}
+</div>

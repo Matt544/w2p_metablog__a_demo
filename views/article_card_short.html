@@ -1,0 +1,27 @@
+<div class="my-include-section p-4">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Subsection File', 'position-absolute'],
+          vars=dict(View=['views/article_card_short.html', 'html']))}}
+
+  <div class="col">
+    <div class="card shadow my-4 p-3 my-border-left-info my-border-left">
+      <img src="{{=URL('download', args=article.image)}}" class="card-img-top my-blog-card-image w-75" alt="Illustration for article">
+      <div class="card-body">
+        <div class="card-body">
+          <h2 class="card-title h5"><a class="text-decoration-none link-secondary"
+              href="{{=URL(c='resource', f='article', args=article.slug)}}">{{=article.title}}</a></h2>
+          <p class="text-muted small">By {{=article.author}} @ {{=article.created_on}}</p>
+          <p class="card-text">{{=article.summary[0:180]}}... <a class=""
+              href="{{=URL(c='resource', f='article', args=article.slug)}}">Read more</a></p>
+          <p class="text-muted small mb-2">Category:
+            <a href="{{=URL(c='blog', f='category', args=article.categories[0].slug)}}">
+              {{=article.categories[0].name}}
+            </a>
+          </p>
+          <p class="text-muted small mb-2">Tags: {{=tag_link_list(article.tags)}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

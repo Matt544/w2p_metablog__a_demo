@@ -1,0 +1,25 @@
+{{response.title = 'w2p_metabog Delete Article'}}
+{{extend 'base.html'}}
+
+<div class="my-max-width my-main-include-section mx-auto position-relative p-5">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Controller=['controllers/users.py', 'python'], 
+                    View=['views/users/confirm_delete_article.html', 'html']))}}
+
+  {{if user_is_author:}}
+  <h1 class="w-50">Are you sure you want to delete "{{=record.title}}"?</h1>
+  <a href="{{=delete}}" class="btn btn-danger">
+    Yes, delete
+  </a>
+  <a href="{{=not_delete}}" class="btn btn-info">
+    No, do NOT delete!
+  </a>
+
+  {{else:}}
+  <p class="mx-auto text-center">
+    {{=no_permission}}
+  </p>
+  {{pass}}
+</div>

@@ -1,0 +1,12 @@
+<div class="row mb-3 my-files-list {{=position}}">
+  <div class="col-auto card text-dark shadow my-border-left my-border-left-danger">
+    <p class="fw-bold pt-2 mb-0">{{=title}}</p>
+    <ul class="list-unstyled pb-0">
+      
+      {{for file in files_list:}}
+      {{=file}}
+      {{pass}}
+    
+    </ul>
+  </div>
+</div>

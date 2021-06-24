@@ -1,0 +1,27 @@
+{{response.title = 'w2p_metablog Legalities'}}
+{{extend 'base.html'}}
+
+<div class="my-main-width my-border-dashed border-dark p-5 mx-auto position-relative">
+    
+  {{=LOAD('files_list', 'files_list.load', 
+        args=['Section Files', 'my-position-absolute-right'],
+        vars=dict(Controller=['controllers/home.py', 'python'], 
+                  View=['views/home/legalities.html', 'html']))}}
+  
+  <h1>Legalities</h1>
+  <h2 class="text-muted">Terms of Use</h2>
+  <p>
+    You are welcome to make any legal use of this site and its code that you like. However, you do so at your own risk. 
+    Note that I am not a professional developer but a hobbyist (and a rookie, at that). Don’t assume I’ve done things 
+    properly or even securely. I disclaim all liability for use of this site and its code. 
+  </p>
+  <h2 class="text-muted">Privacy “Policy”</h2>
+  <p>
+    I won’t do anything with any personal information you send to the site’s databases. Note also that you don’t 
+    have to use real information to register and post articles or comments; fake names and email addresses will work fine.
+  </p>
+  <p>
+    I expect to periodically delete all user created accounts and content, either manually or (if I can figure how) 
+    programmatically.
+  </p>
+</div>

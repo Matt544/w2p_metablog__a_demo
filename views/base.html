@@ -1,0 +1,134 @@
+<!-- The below sets the value of the varaibles that will place either None or 
+    "active" in menu nav-items -->
+{{home_active = None}}
+{{blog_active = None}}
+
+{{if response.title == 'w2p_metablog Home':}}
+  {{home_active = 'active'}}
+{{elif response.title == 'w2p_metablog Archive':}}
+  {{blog_active = 'active'}}
+{{pass}}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  <link href="{{=URL('static', 'css/custom.css')}}" rel="stylesheet">
+
+  {{include 'web2py_ajax.html'}}
+
+  <title>{{=response.title or request.application}}</title>
+  <meta name="application-name" content="{{=request.application}}">
+</head>
+
+<body class="bg-light">
+  <div class="w2p_flash">{{=response.flash or ''}}</div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top shadow p-3 my-mb-6">
+    <div class="container-fluid my-max-width">
+      <a class="navbar-brand text-warning" href="{{=URL('home', 'index')}}">
+        w2p_metablog<br class="d-inline d-sm-none"><span class="text-info">__a demo</span>
+      </a>
+      <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link mx-1 {{=home_active}}" aria-current="page"
+              href="{{=URL('home', 'index')}}">Home</a></li>
+          <li class="nav-item"><a class="nav-link mx-1 {{=blog_active}}" href="{{=URL('blog', 'archive')}}">Blog</a>
+          </li>
+
+          {{if auth.is_logged_in():}}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown">
+              {{=auth.user.first_name}}
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item mx-1" href="{{=URL('users', 'user/logout')}}">Logout</a>
+              </li>
+              <li>
+                <a class="dropdown-item mx-1" href="{{=URL('users', 'account', args=auth.user.id, user_signature=True)}}">
+                  Account
+                </a>
+              </li>
+            </ul>
+          </li>
+          {{else:}}
+          <li class="nav-item"><a class="nav-link mx-1" href="{{=URL('users', 'user/login')}}">Login</a></li>
+          {{pass}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid my-max-width">
+
+    {{=LOAD('files_list', 'files_list.load', 
+            args=['Common Files', 'my-position-absolute-left'],
+            vars=dict(Model_1=["models/db.py", 'python'], 
+                      Model_2=["models/tables.py", 'python'], 
+                      View=["views/base.html", 'html'],
+                      Custom_CSS=["static/css/custom.css", 'c']))}}
+
+    {{include}} <!-- This "include" is the "hole" where all non-generic page 
+                     content is slotted into this generic layout file -->
+
+  </div class="container-fluid">
+
+  <!-- Footer -->
+  <footer class="mt-5 py-5 text-center bg-secondary text-light">
+    <div class="mb-3">&copy copyright {{=request.now.year}}</div>
+    <div class="mb-3"><a class="text-light" href="{{=URL('home', 'legalities.html')}}">Terms of use and privacy "policy"</a></div>
+    <div class="mb-3">
+      <a class="btn btn-primary" data-bs-toggle="collapse" href="#creditWhereDue" 
+         role="button" aria-expanded="false" aria-controls="creditWhereDue">
+        Credit Where it's Due
+      </a>
+    </div>
+    <div class="collapse" id="creditWhereDue">
+      <div class="card card-body my-main-width mx-auto text-dark text-start">
+        <p>A non-exhaustive list of sources I drew on for specific things:</p>
+        <ul>
+          <li>
+            All illustrations are from <a href="https://undraw.co/illustrations" target="_blank" rel="noopener noreferrer">https://undraw.co/illustrations</a>
+          </li>
+          <li>
+            The code that runs ajax in the nested reply form accordion (in "article.html") is from 
+            <a href="http://brunorocha.org/python/web2py/loading-html-elements-dynamically-with-web2py-and-ajax.html" target="_blank" rel="noopener noreferrer">
+              http://brunorocha.org/python/web2py/loading-html-elements-dynamically-with-web2py-and-ajax.html
+            </a>  
+          </li>
+          <li>
+            The colors in code listings with syntax highlighting are from 
+            <a href="https://ethanschoonover.com/solarized/" target="_blank" rel="noopener noreferrer">
+              https://ethanschoonover.com/solarized/
+            </a>
+          </li>
+          <li>And tons of other sources in the excellent web2py community and documentation!</li>
+        </ul>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 js bundle CDN with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+    crossorigin="anonymous"></script>
+  
+  {{block page_js}}{{end page_js}}
+
+</body>
+</html>

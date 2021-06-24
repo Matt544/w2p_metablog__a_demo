@@ -1,0 +1,23 @@
+{{response.title = 'w2p_metabog Behind the Scenes'}}
+{{extend 'base.html'}}
+
+<div class="my-max-width my-main-include-section mx-auto p-5">
+  <h1 class="mb-5 text-end">Code in <span class="text-info">{{=requested_path}}</span></h1>
+
+  {{if permission:}}
+  {{=XML(CODE(the_code, language=requested_language).xml())}}
+  
+  {{else:}}
+  <h2 class="text-center">{{=no_permission}}</h2>
+  {{pass}}
+</div>
+
+{{=LOAD('files_list', 'files_list.load', 
+         args=['Section Files', None], 
+         vars=dict(Controller=['controllers/show_code.py', 'python'], 
+                   View=['views/show_code/read.html', 'html']))}}
+
+{{=LOAD('files_list', 'files_list.load', 
+         args=['Code List Files (i.e. like this)', None],
+         vars=dict(Controller=['controllers/files_list.py', 'python'], 
+                   View=['views/files_list/files_list.load', 'html']))}}

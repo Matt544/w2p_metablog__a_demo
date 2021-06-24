@@ -1,0 +1,204 @@
+/* 
+================================
+INDEX:
+1.  Elements
+2.  Bootstrap classes
+3.  web2py classes
+4.  Custom classes 
+================================
+*/
+
+/* 
+================================
+ELEMENTS
+================================ 
+*/
+
+:root {
+    --info: #5bc0de;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    font-size: 1.2em;
+}
+
+a { text-decoration: none !important; }
+
+pre { font-size: 0.76rem; }
+
+table {
+    width: 100%;
+    background-color: #fdf6e3;
+    line-height: 1.1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0px 0px 2px #000000;
+    border-radius: .25rem;
+    padding: 1.5rem 0;
+}
+
+td { padding: 0.7rem 0.2rem 0rem .05rem; }
+
+td:first-child {
+    width: 1.5rem;
+    padding-left: 0.7rem;
+    padding-right: 0.5rem;
+    background-color: #eee8d5;
+}
+
+td:last-child {
+    max-width: 5rem;
+    padding-left: 0.2rem;
+}
+
+/* 
+================================
+BOOTSTRAP CLASSES
+================================ 
+*/
+
+.form-control { margin-bottom: 1rem; }
+
+/* Note: The below two form classes are necessary for me because Bootstrap 5 uses 
+different class name for this, and w2p generates the Bootstrap 4 class names */
+
+.form-control-label { margin-bottom: .5rem; }
+
+.form-group { margin-bottom: 1rem; }
+
+.navbar { margin-bottom: 5.5rem; }
+
+.navbar-dark .navbar-nav .nav-link.active, 
+.navbar-dark .navbar-nav .show>.nav-link {
+    background-color: #2e3236;
+    border-radius: 0.3rem;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus, 
+.navbar-dark .navbar-nav .nav-link:hover {
+    background-color: #7b8490;
+    border-radius: 0.3rem;
+}
+
+.navbar-nav .nav-link {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    margin: 0.2rem 0 0 0;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    color: #1e2125;
+    background-color: inherit;
+}
+
+/* 
+================================
+WEB2PY CLASSES
+================================ 
+*/
+
+/* Credit where it's due: The below regarding flash and error_wrapper is based on code from 
+https://github.com/web2py/web2py/blob/master/applications/welcome/static/css/web2py.css#L91
+*/
+
+div.w2p_flash {
+    font-weight: bold;
+    display: none;
+    position: fixed;
+    padding: 1rem 1.5rem;
+    top: 10%;
+    right: 10%;
+    min-width: 10rem;
+    opacity: 0.95;
+    margin: 0px 0px 10px 10px;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    -o-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    background-image: -webkit-linear-gradient(top, #222, #000);
+    background-image: -o-linear-gradient(top, #222, #000);
+    background-image: -moz-linear-gradient(90deg, #222, #000);
+    background-image: linear-gradient(top, #222, #000);
+    background-repeat: repeat-x;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    z-index: 2000;
+}
+
+div.w2p_flash:hover { opacity: 0.5; }
+
+div.error {
+    display: inline-block; 
+    width: 120px;
+    background-color: rgb(240, 57, 96);
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: relative;
+    top: -0.8rem;
+    left: 2rem;
+    z-index: 1;
+}
+
+div.error:after {
+    content: '▴';
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: rgb(240, 57, 96);
+    position: absolute;
+    top: -1.6rem;
+    right: 25%;
+}
+
+/* 
+================================
+CUSTOM CLASSES
+================================ 
+*/
+
+.my-max-width { max-width: 65rem; }
+
+.my-main-width { max-width: 45rem; }
+
+.my-border-dashed { border: 2px dashed; }
+
+.my-border-left { border-left-width: 0.35rem; }
+
+.my-border-left-info { border-left-color: var(--info); }
+
+.my-border-left-warning { border-left-color: var(--warning); }
+
+.my-border-left-danger { border-left-color: var(--danger); }
+
+.my-blog-card-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+}
+
+.my-text-shadow { text-shadow: 2px 2px #97cada; }
+
+.my-main-include-section { border: 2px dashed black; }
+
+.my-include-section { border: 2px dashed var(--info); }
+
+.my-include-section2 { border: 2px dashed var(--warning); }
+
+.my-files-list { z-index: 10; }
+
+.my-position-absolute-right {
+    position: absolute;
+    right: 0;
+}
+
+.my-position-absolute-left {
+    position: absolute;
+    left: 10%;
+    top: 4.8rem;
+}

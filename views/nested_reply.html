@@ -1,0 +1,20 @@
+<div class="my-include-section2 position-relative p-4">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Subsection File', 'my-position-absolute-right'],
+          vars=dict(View=['views/nested_reply.html', 'html']))}}
+
+  <div class="card ps-3 pt-2 mt-5 ms-auto w-75 shadow my-border-left-warning my-border-left">
+    <div class="card-body">
+      <p class="fst-italic">{{=nested_reply.author}} says:</p>
+      <p>
+        {{=XML(markmin2html(nested_reply.body, extra=extra), sanitize=True, 
+               allowed_attributes={'a':['href', 'title'], 'img':['src', 'alt'], 
+               'blockquote':['type'], 'span':['style']})}}
+      </p>
+      <p class="text-muted small">
+        @ {{=nested_reply.created_on}} | nested reply id: {{=nested_reply.id}}
+      </p>
+    </div>
+  </div>
+</div>

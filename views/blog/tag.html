@@ -1,0 +1,21 @@
+{{response.title = 'w2p_metablog Blog Tag'}}
+{{extend 'base.html'}}
+
+<div class="my-max-width mx-auto my-main-include-section p-5 position-relative">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Module=['modules/blog_helpers.py', 'python'],
+                    Controller=['controllers/blog.py', 'python'], 
+                    View=['views/blog/tag.html', 'html']))}}
+
+  <h1 class="text-center mt-5 my-text-shadow fw-bold">Tag: {{=tag_record.name}}</h1>
+  <h2 class="text-muted text-center mb-5">All our articles on {{=tag_record.name}}</h2>
+  <div class="row row-cols-1 row-cols-md-2 mx-0 gx-5">
+
+    {{for article in tagged_articles:}}
+    {{include 'article_card_short.html'}}
+    {{pass}}
+
+  </div>
+</div>

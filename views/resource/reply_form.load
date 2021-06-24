@@ -1,0 +1,232 @@
+{{from gluon.tools import Recaptcha2}}
+{{from gluon.contrib.markmin.markmin2html import markmin2html}}
+
+<div class="bg-secondary text-light p-5 my-5">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Ajax Files', None], 
+          vars=dict(Controller=['controllers/resource.py', 'python'], 
+                    View=['views/resource/reply_form.load', 'html']))}}
+
+  {{if logged_in:}}
+
+  <h3 class="mb-4">Leave a comment!</h3>
+  
+  {{=form.custom.begin}}
+
+  <label for="reply_author" class="form-label text-light">Author</label>
+  {{form.custom.widget.author["_value"] = auth.user.first_name}}
+  {{form.custom.widget.author["_readonly"] = ""}}
+  {{=form.custom.widget.author}}
+
+  <label for="reply_body" class="form-label text-light">Body</label>
+  {{form.custom.widget.body["_rows"] = 7}}
+  {{form.custom.widget.body["_onkeyup"] = "ajax('" + URL('resource', 'echo',\ 
+                                           extension=False) + "', " + " ['body'],\ 
+                                           'target2')"}}
+  {{=form.custom.widget.body}}
+
+  <div class="accordion" id="preview_accordion">
+    <div class="btn-group w-100 mb-3">
+      <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#reply_preview" type="button"
+        aria-expanded="false" aria-controls="reply_preview">Toggle Comment Preview</button>
+      <button class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#markmin_primer" type="button"
+        aria-expanded="false" aria-controls="markmin_primer">Toggle Markmin Syntax Primer</button>
+    </div>
+    <div class="collapse accordion-collapse" id="reply_preview" data-bs-parent="#preview_accordion">
+      <div class="card text-dark my-3">
+        <div class="card-header">
+          <h4 class="text-center text-muted">Type above to see preview</p>
+        </div>
+        <div class="card-body">
+          <div id="target2"></div>
+        </div>
+      </div>
+    </div>
+    <div class="collapse accordion-collapse" id="markmin_primer" data-bs-parent="#preview_accordion">
+      <div class="card my-3">
+        <div class="card-header">
+          <h4 class="text-center text-muted">Markmin Syntax Primer</h4>
+        </div>
+        {{italics = "two single quotes ''for italics''"}}
+        {{bold = "two asterisks **for bold**"}}
+        {{inline_code = "backticks for ``inline code``"}}
+        {{headings = "###### hashtags for headings h1-h6"}}
+        {{python_code = "``def greeting(): return 'Bonjour!'``:code_python"}}
+        {{html_code = "``<div>Lorem ipsum</div>``:code_html"}}
+        {{ordered_list = "+one\n+two\n+three"}}
+        {{unordered_list = "-one\n-two\n-three"}}
+        {{color = "This for ``color``:color[red]"}}
+        {{highlight = "This to ``highlight``:color[:yellow]"}}
+        {{color_highlight = "``highlight + text color``:color[#F0F8FF: #2B547E]"}}
+
+        <div class="card-body text-dark">
+          <div class="row border-bottom p-2">
+            <div class="col text-muted">
+              <h5>You type this:</h5>
+            </div>
+            <div class="col text-muted">
+              <h5>It creates this:</h5>
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=italics}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(italics)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=bold}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(bold)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=inline_code}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(inline_code)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              <pre class="mb-0" style='font-family: system-ui,-apple-system,sans-serif;'>
+  ``
+  backticks on 
+    their own lines for 
+      multi-line verbatim code
+  ``
+              </pre>
+            </div>
+            <div class="col">
+              <pre class="mb-0">
+  backticks on 
+    their own lines for 
+      multi-line verbatim code
+              </pre>
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=python_code}}
+            </div>
+            <div class="col">
+              {{=XML(markmin2html(python_code, extra=extra), sanitize=True, 
+                     allowed_attributes={'a':['href', 'title'], 
+                     'img':['src', 'alt'], 'blockquote':['type'], 
+                     'span':['style']})}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=html_code}}
+            </div>
+            <div class="col">
+              {{=XML(markmin2html(html_code, extra=extra), sanitize=True, 
+                     allowed_attributes={'a':['href', 'title'],
+                     'img':['src', 'alt'], 'blockquote':['type'], 
+                     'span':['style']})}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              <ul class="list-unstyled">
+                <li>+one</li>
+                <li>+two</li>
+                <li>+three</li>
+              </ul>
+            </div>
+            <div class="col">
+              {{=MARKMIN(ordered_list)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              <ul class="list-unstyled">
+                <li>-one</li>
+                <li>-two</li>
+                <li>-three</li>
+              </ul>
+            </div>
+            <div class="col">
+              {{=MARKMIN(unordered_list)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=headings}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(headings)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=color}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(color)}}
+            </div>
+          </div>
+          <div class="row border-bottom p-2">
+            <div class="col">
+              {{=highlight}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(highlight)}}
+            </div>
+          </div>
+          <div class="row p-2">
+            <div class="col">
+              {{=color_highlight}}
+            </div>
+            <div class="col">
+              {{=MARKMIN(color_highlight)}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    {{=form[1]}} <!-- This is the reacaptcha -->
+  </div>
+
+  {{=form.custom.submit}}
+  {{=form.custom.end}}
+
+  {{if last_reply:}}
+  {{reply = last_reply}}
+  <!-- This renaming of the variable allows use of the generic reply.html to 
+       display just-submitted reply -->
+  {{existing_reply = False}}
+  {{reply_container_id = "reply_container_id_" + str(last_reply.id)}}
+  {{include 'reply.html'}}
+  {{pass}}
+
+  {{else:}} <!-- i.e. after the "if logged_in" code block -->
+  
+  <h3>Sign in or register to comment!</h3>
+  <a class="btn btn-info" href="
+    {{=URL('users', 'user/register', extension='html', 
+            vars=dict(_next=URL('resource', 'article', 
+                                 args=slug + '#reply_form', 
+                                 url_encode=False, extension='html')))}}">
+    Register
+  </a>
+  <a class="btn btn-light" href="
+    {{=URL('users', 'user/login', extension='html', 
+            vars=dict(_next=URL('resource', 'article', 
+                                 args=slug + '#reply_form', 
+                                 url_encode=False, extension='html')))}}">
+    Log in
+  </a>
+  
+  {{pass}}
+</div>

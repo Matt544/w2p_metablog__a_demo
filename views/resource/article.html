@@ -1,0 +1,102 @@
+{{response.title = 'w2p_metabog Article'}}
+{{from gluon.contrib.markmin.markmin2html import markmin2html}}
+{{extend 'base.html'}}
+
+<div class="my-main-width my-main-include-section position-relative mx-auto p-5">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Controller=['controllers/resource.py', 'python'], 
+                    View=['views/resource/article.html', 'html']))}}
+
+  <img class="img-fluid mb-5" src="{{=URL('download', args=article.image)}}" alt="Illustration for article">
+
+  <!-- Displaying article content -->
+    <h1 class="my-text-shadow">
+      {{=SPAN(article.title, _class='text-shadow')}}
+      {{if article.subtitle:}}
+      {{=BR() + SPAN(article.subtitle, _class='text-muted')}}
+      {{pass}}
+    </h1>
+    <p class="text-muted small">By {{=article.author}} @ {{=article.created_on}}</p>
+
+    {{=XML(markmin2html(article.body, extra=extra), sanitize=True, 
+           allowed_attributes={'a':['href', 'title'], 'img':['src', 'alt'], 
+           'blockquote':['type'], 'span':['style']})}}
+
+  <!-- Loading the reply form -->
+  <div id="reply_form"></div> <!-- This div only provides an anchor to bring the
+                                   user back to the reply form after logging in -->
+  {{=LOAD('resource', 'reply_form.load', 
+          args=article.slug, ajax=True, 
+          content=DIV(SPAN(_class='visually-hidden'), 
+          _class='spinner-border text-primary', _role='status'))}}
+
+  <!-- Displaying replies to articles and button toggling the "accordion" dropdown 
+       nested reply forms -->
+  {{if replies:}}
+  <div class="accordion" id="replies_accordion">
+    {{for reply in replies:}}
+    {{existing_reply = True}}
+    <!-- This variable "existing_reply" determines whether, in reply.html, the button 
+      to toggle a reply form will be displayed. It will not be displayed for newly 
+      submitted replies (i.e. in reply_form.load). -->
+    {{reply_form_container_id = "reply_form_container_id_" + str(reply.id)}}
+    {{ajax_target = str(reply.id) + "ajax"}}
+    {{reply_container_id = "reply_container_id_" + str(reply.id)}}
+
+    {{include 'reply.html'}}
+
+    <div class="accordion-collapse collapse" data-bs-parent="#replies_accordion" id="{{=reply_form_container_id}}">
+      <div style="min-height: 25rem;">
+        <div id="{{=ajax_target}}"></div>
+      </div>
+    </div>
+
+    <!-- Displaying nested_replies -->
+    {{nested_replies = None}}
+    {{if auth.is_logged_in():}}
+
+    {{nested_replies = db(
+        (db.nested_reply.reply_id==reply.id) 
+        & ((db.nested_reply.account_user==1) 
+        | (db.nested_reply.account_user==auth.user.id))
+        ).select(orderby=~db.nested_reply.id)}}
+
+    {{else:}}
+
+    {{nested_replies = db(
+          (db.nested_reply.reply_id==reply.id) 
+          & (db.nested_reply.account_user==1)
+          ).select(orderby=~db.nested_reply.id)}}
+    {{pass}}
+        
+    {{if nested_replies:}}
+    {{for nested_reply in nested_replies:}}
+
+    {{include 'nested_reply.html'}}
+
+    {{pass}}
+    {{pass}}
+    {{pass}}
+  </div> <!--closing accordion -->
+  {{pass}}
+</div>
+
+{{block page_js}}
+<!-- Script for ajax nested reply forms. This jQuery script is from 
+     http://brunorocha.org/python/web2py/loading-html-elements-dynamically-with-web2py-and-ajax.html
+     and is an alternative to using a LOAD function in web2py 
+    -->
+<script>
+  $(function () {
+    $('.load_content').on('click', function (e) {
+      elem = $(this); // elem = $(e.target)
+      url = elem.attr("data-url");
+      target = elem.attr("data-target");
+      web2py_ajax_page("GET", url, "", target);
+      return false; // e.preventDefault()
+    });
+  })
+</script>
+{{end page_js}}

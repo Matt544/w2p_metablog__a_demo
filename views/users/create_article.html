@@ -1,0 +1,17 @@
+{{response.title = 'w2p_metabog Create Article'}}
+{{extend 'base.html'}}
+
+<div class="my-max-width my-main-include-section mx-auto position-relative p-5">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Controller=['controllers/users.py', 'python'], 
+                    View=['views/users/create_article.html', 'html']))}}
+  
+  <div class="d-flex justify-content-center">
+    <a class="btn w-50 btn-primary mb-4" href="{{=URL('users', 'account', args=auth.user.id, user_signature=True)}}">
+      Back to Account
+    </a>
+  </div>
+  {{=form}}
+</div>

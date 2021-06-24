@@ -1,0 +1,99 @@
+{{response.title = 'w2p_metablog Home'}}
+{{extend 'base.html'}}
+
+<div class="my-main-width my-main-include-section p-5 mx-auto position-relative">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Module=['modules/blog_helpers.py', 'python'],
+                    Controller=['controllers/home.py', 'python'], 
+                    View=['views/home/index.html', 'html']))}}
+
+  <img src="{{=URL('static', 'images/undraw_city_life_gnpr.svg')}}" class="img-fluid mx-auto" alt="Illustration of city">
+  <h1 class="text-center mt-5 my-text-shadow fw-bold">Welcome to w2p_metablog!</h1>
+  <h2 class="text-muted text-center mb-5">A back-end blog demo built with web2py</h2>
+
+  <div class="px-4">
+    <h3 class="h2 my-text-shadow text-center mb-4">What this is</h3>
+    <p>
+      This is a step on my road to learning how to use web2py. It is also a demonstration site showing the approach I 
+      took to making a dynamic blog app, including:
+    </p>
+    <ul>
+      <li>blog articles</li>
+      <li>comments</li>
+      <li>nested comments</li>
+      <li>contact form</li>
+      <li>user accounts and authentication</li>
+      <li>CRUD, generally</li>
+    </ul>
+    <h3 class="h2 my-text-shadow text-center mb-4">What you'll find</h3>
+    <p>
+      Most of the code that is creating this site can be displayed by clicking on the relevant file name in 
+      the cards with the <span class="border border-danger px-1">red</span> left borders. Those file lists include all 
+      applicable controllers, models, views and one module. They are displayed using a function that reads the same 
+      files used to create this site, not copies. So if this page is working, then the code there works.
+    </p>
+    <p>
+      The sections with dashed <span class="my-border-dashed border-dark px-1">black</span> borders represent the first 
+      level of included file (i.e. using web2py's <code>{</code><code>{include}}</code> within the 
+      generic "base.html"). Deeper levels of "included" files (i.e. using web2py's <code>{</code><code>{include file.html}}</code>) 
+      are surrounded by <span class="my-border-dashed border-info px-1">blue</span> 
+      or <span class="my-border-dashed border-warning px-1">yellow</span> dashed borders.
+    </p>
+    <p>
+      Files that use web2py's LOAD function (e.g. "contact_form.load") have a dark grey 
+      <span class="bg-secondary px-1 text-light">background</span>. (But note, though the header and footer have the 
+      same dark background, they do not use LOAD or other ajax code.)
+    </p>
+    <p>
+      Each page of the site is put together using multiple files and my intention with the different colored borders 
+      and backgrounds is to clarify how the various files interact to create one page.
+    </p>
+    <h3 class="h2 my-text-shadow text-center mb-4">What you can do</h3>
+    <p> 
+      You can create an account, write articles and leave comments. Note, however, that anything you post will be 
+      viewable only by you, or me if I were to access content through web2py's appadmin. User created accounts and 
+      content will be periodically deleted.
+    </p>
+    <p>
+      I don't expect to ever check user generated content, so leaving comments will not be an effective way to contact 
+      me. Ditto for the contact form. 
+    </p>
+    <p>
+      If you have <span class="text-danger">comments, concerns, or typo/bug/security alerts</span> to communicate, 
+      please send an email to matthew.thom.email@gmail.com</a>
+    </p>
+    <p>
+      This is simply a learning exercise for me, which I hope others may also find helpful. Fiddle around all you like! 
+    </p>
+    <p class="blockquote-footer text-end">Matthew</p>
+  </div>
+
+  <!-- Display the three most recently posted articles -->
+  <div class="row">
+    {{for article in articles[:3]:}}
+    <div class="col-12">
+      <div class="card shadow my-5 p-5 my-border-left-info my-border-left">
+        <img src="{{=URL('download', args=article.image)}}" class="card-img-top my-blog-card-image" alt="Illustration for article">
+        <div class="card-body">
+          <h4 class="card-title h5"><a class="text-decoration-none link-secondary"
+              href="{{=URL(c='resource', f='article', args=article.slug)}}">{{=article.title}}</a></h4>
+          <p class="text-muted small">By {{=article.author}} @ {{=article.created_on}}</p>
+          <p class="card-text">{{=article.summary}} ... <a class=""
+              href="{{=URL(c='resource', f='article', args=article.slug)}}">Read more</a></p>
+          <p class="text-muted small mb-2">Category: <a
+              href="{{=URL(c='blog', f='category', args=article.categories[0].slug)}}">{{=article.categories[0].name}}</a>
+          </p>
+          <p class="text-muted small mb-2">Tags: {{=tag_link_list(article.tags)}}</p>
+        </div>
+      </div>
+    </div>
+    {{pass}}
+  </div>
+
+  {{=LOAD('contact_form', 'contact_form.load', ajax=True, 
+          content=DIV(SPAN(_class='visually-hidden'),
+          _class='spinner-border text-primary', _role='status'))}}
+
+</div> <!-- closing my-main-width -->

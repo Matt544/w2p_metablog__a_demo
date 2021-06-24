@@ -1,0 +1,31 @@
+{{response.title = 'w2p_metabog User Account'}}
+{{extend 'base.html'}}
+
+<div class="my-max-width my-main-include-section mx-auto position-relative p-5">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Section Files', 'my-position-absolute-right'],
+          vars=dict(Controller=['controllers/users.py', 'python'], 
+                    View=['views/users/account.html', 'html']))}}
+  
+  {{if user_is_requested_user:}}
+  <h1 class="my-4">Welcome to your account, {{=auth.user.first_name}}</h1>
+  <a class="btn btn-primary" href="{{=URL('users', 'create_article')}}">New Article</a>
+
+  <ul class="list-group list-group-flush my-4">
+    {{for article in articles:}}
+    <li class="list-group-item d-flex align-items-center bg-light">{{=article.title}}
+      <a class="btn btn-info ms-auto d-inline-block"
+        href="{{=URL('resource', 'article', args=article.slug)}}">View</a>
+      <a class="btn btn-warning ms-1" 
+         href="{{=URL('users', 'update_article', args=article.id, user_signature=True)}}">Update</a>
+      <a class="btn btn-danger ms-1" 
+         href="{{=URL('users', 'confirm_delete_article', args=article.id, user_signature=True)}}">Delete</a>
+    </li>
+    {{pass}}
+  </ul>
+
+  {{else:}}
+  {{=no_permission}}
+  {{pass}}
+</div>

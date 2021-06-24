@@ -1,0 +1,12 @@
+*.bak
+*.svg
+__pycache__/
+databases/*
+private/*
+cache/
+errors/
+sessions/
+uploads/
+cron/
+languages/
+static/images

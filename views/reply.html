@@ -1,0 +1,39 @@
+<div class="my-include-section position-relative p-4">
+
+  {{=LOAD('files_list', 'files_list.load', 
+          args=['Subsection File', 'my-position-absolute-right'],
+          vars=dict(View=['views/reply.html', 'html']))}}
+
+  <div class="card text-dark ps-3 py-2 mt-5 shadow my-border-left-info my-border-left" id="{{=reply_container_id}}">
+    <div class="card-body">
+      <p class="fst-italic">{{=reply.author}} says:</p>
+      <p>
+        {{=XML(markmin2html(reply.body, extra=extra), sanitize=True, 
+               allowed_attributes={'a':['href', 'title'],
+               'img':['src', 'alt'], 'blockquote':['type'], 
+               'span':['style']})}}
+      </p>
+      <p class="text-muted small">
+        @ {{=reply.created_on}} | reply id: {{=reply.id}}
+      </p>
+
+      {{if existing_reply:}}
+      <button class="btn btn-primary load_content" 
+              type="button" 
+              data-bs-toggle="collapse"
+              data-bs-target="#{{=reply_form_container_id}}" 
+              aria-expanded="true" 
+              aria-controls="{{=reply_form_container_id}}"
+              data-target="{{=ajax_target}}"
+              data-url="{{=URL('resource', 'nested_reply_form.load', 
+                               args=article.slug, 
+                               vars=dict(reply_id=reply.id, 
+                                         reply_container_id=reply_container_id, 
+                                         reply_author=reply.author))}}">
+        Reply to {{=reply.author}}
+      </button>
+      {{pass}}
+
+    </div>
+  </div>
+</div>
